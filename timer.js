@@ -11,43 +11,47 @@
 		return output;
 	}
 	
-	function Timer ($interval, seconds = 0, alarmSeconds = 0) {
-		var self = this;
-		this.$interval = $interval;
+	function Timer (seconds = 0, alarmSeconds = 0) {
 		this.seconds = seconds;
 		this.formattedSeconds = formatTime(seconds);
 		this.alarmSeconds = alarmSeconds;
-		this.formattedAlarmSeconds = formatTime(alarmSeconds);
+		this.formattedAlarmSeconds = formatTime(alarmSeconds);		
+	}
+	
+	app.controller('TimerController', ['$scope', '$interval', function($scope, $interval){
+		var self = this;
+		var timer = $scope.timer;
 		this.interval = null;
-		this.increment = function(){
-			self.seconds++;			
-			self.formattedSeconds = formatTime(self.seconds);
-		};
+		
+		function increment(){
+			timer.seconds++;
+			timer.formattedSeconds = formatTime(timer.seconds);
+		}
 		this.startTimer = function(){
 			if (!self.interval){
-				self.interval = self.$interval(self.increment, 1000);
+				self.interval = $interval(increment, 1000);
 			}			
 		};
 		this.stopTimer = function(){
 			if (self.interval){
-				self.$interval.cancel(self.interval);
+				$interval.cancel(self.interval);
 				self.interval = null;
 			}
 		};
 		this.resetTimer = function(){
-			self.seconds = 0;
-			self.formattedSeconds = formatTime(self.seconds);
+			timer.seconds = 0;
+			timer.formattedSeconds = formatTime(timer.seconds);
 		};
-	}
+	}]);	
 	
-	app.controller('TimerController', ['$interval', function($interval){
+	app.controller('AppController', function(){
 		var self = this;
 		this.timers = [];
 		addTimer();		
 		
 		function addTimer(){
-			self.timers.push(new Timer($interval));
+			self.timers.push(new Timer());
 		}
-	}]);
+	});
 	
 })();
