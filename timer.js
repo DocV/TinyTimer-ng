@@ -1,6 +1,8 @@
 (function(){
 	var app = angular.module('timer', []);
 	
+	var notificationAudio = new Audio("Notification.wav");
+	
 	function formatTime(time) {
 		var hours = Math.floor(time / 3600)
 		var output = (hours < 10 ? "0" : "") + hours + ":";
@@ -11,11 +13,13 @@
 		return output;
 	}
 	
-	function Timer (seconds = 0, alarmSeconds = 0) {
+	function Timer (seconds = 0, alarmSeconds = 0, alarmEnabled = true) {
 		this.seconds = seconds;
 		this.formattedSeconds = formatTime(seconds);
 		this.alarmSeconds = alarmSeconds;
-		this.formattedAlarmSeconds = formatTime(alarmSeconds);		
+		this.formattedAlarmSeconds = formatTime(alarmSeconds);
+
+		this.alarmEnabled = alarmEnabled;
 	}
 	
 	app.controller('TimerController', ['$scope', '$interval', function($scope, $interval){
@@ -26,6 +30,9 @@
 		function increment(){
 			timer.seconds++;
 			timer.formattedSeconds = formatTime(timer.seconds);
+			if (timer.alarmEnabled && timer.seconds == timer.alarmSeconds){
+				notificationAudio.play();
+			}
 		}
 		this.startTimer = function(){
 			if (!self.interval){
@@ -42,6 +49,16 @@
 			timer.seconds = 0;
 			timer.formattedSeconds = formatTime(timer.seconds);
 		};
+		this.adjustAlarm = function(amount){
+			timer.alarmSeconds += amount;
+			if (timer.alarmSeconds < 0){
+				timer.alarmSeconds = 0;
+			}
+			timer.formattedAlarmSeconds = formatTime(timer.alarmSeconds);
+		};
+		this.toggleAlarm = function(){
+			timer.alarmEnabled = !timer.alarmEnabled;
+		}
 	}]);	
 	
 	app.controller('AppController', function(){
