@@ -13,7 +13,7 @@
 			<div ng-repeat="timer in appCtrl.timers" ng-controller="TimerController as timerCtrl">
 				<div class="row">
 				
-					<div class="col-sm-2 text-center">{{timer.formattedSeconds}}</div>
+					<div class="col-sm-2 text-center timer-display">{{timer.formattedSeconds}}</div>
 					<div class="col-sm-2">
 						<a href class="btn btn-default btn-block" role="button" ng-click="timerCtrl.startTimer()">Start</a>
 					</div>
@@ -25,7 +25,7 @@
 					</div>
 				</div>
 				<div class="row">
-					<div class="col-sm-2 text-center" ng-class="{finished: timer.alarmEnabled && timer.seconds >= timer.alarmSeconds}">{{timer.formattedAlarmSeconds}}</div>
+					<div class="col-sm-2 text-center timer-display" ng-class="{finished: timer.alarmEnabled && timer.seconds >= timer.alarmSeconds}">{{timer.formattedAlarmSeconds}}</div>
 					<div class="col-sm-1">
 						<a href class="btn btn-default btn-block" role="button" ng-click="timerCtrl.adjustAlarm(3600)">Hour+</a>
 					</div>
@@ -44,7 +44,7 @@
 						<a href class="btn btn-default btn-block" role="button" ng-click="timerCtrl.adjustAlarm(-1)">Sec-</a>
 					</div>
 					<div class="col-sm-2">
-						<a href class="btn btn-default btn-block" role="button" ng-click="timerCtrl.toggleAlarm()">{{timer.alarmEnabled ? "Alarm is ON" : "Alarm is OFF"}}</a>
+						<a href class="btn btn-default btn-block" role="button" ng-click="timerCtrl.toggleAlarm()" ng-class="{timer_on: timer.alarmEnabled, timer_off: !timer.alarmEnabled}">{{timer.alarmEnabled ? "Alarm is ON" : "Alarm is OFF"}}</a>
 					</div>
 				</div>
 			</div>

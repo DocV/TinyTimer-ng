@@ -1,3 +1,24 @@
 .finished {
-	color:red
+	color:red;
+}
+.timer_on {
+	background-color:palegreen
+}
+.timer_off {
+	background-color:lightcoral
+}
+.timer_on:focus, .timer_on:hover {
+	background-color:lawngreen
+}
+.timer_off:focus, .timer_off:hover {
+	background-color:red
+}
+.timer-display {
+	font-size:150%;
+	border: 1px solid lightgray;
+	border-radius: 5px;	
+}
+.container {
+	border: 2px solid gray;
+	border-radius: 5px;	
 }

@@ -13,7 +13,7 @@
 		return output;
 	}
 	
-	function Timer (seconds = 0, alarmSeconds = 0, alarmEnabled = true) {
+	function Timer (seconds = 0, alarmSeconds = 0, alarmEnabled = false) {
 		this.seconds = seconds;
 		this.formattedSeconds = formatTime(seconds);
 		this.alarmSeconds = alarmSeconds;
