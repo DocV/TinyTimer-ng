@@ -13,13 +13,14 @@
 		return output;
 	}
 	
-	function Timer (seconds = 0, alarmSeconds = 0, alarmEnabled = false) {
+	function Timer (seconds = 0, alarmSeconds = 0, alarmEnabled = false) {		
 		this.seconds = seconds;
 		this.formattedSeconds = formatTime(seconds);
 		this.alarmSeconds = alarmSeconds;
 		this.formattedAlarmSeconds = formatTime(alarmSeconds);
 
 		this.alarmEnabled = alarmEnabled;
+		this.name = "New Timer"
 	}
 	
 	app.controller('TimerController', ['$scope', '$interval', function($scope, $interval){
@@ -32,6 +33,9 @@
 			timer.formattedSeconds = formatTime(timer.seconds);
 			if (timer.alarmEnabled && timer.seconds == timer.alarmSeconds){
 				notificationAudio.play();
+				if (!document.hasFocus()){
+					document.title = "(" + timer.name + ") " + document.title;
+				}				
 			}
 		}
 		this.startTimer = function(){
@@ -49,6 +53,9 @@
 			timer.seconds = 0;
 			timer.formattedSeconds = formatTime(timer.seconds);
 		};
+		this.deleteTimer = function(){
+			$scope.$emit('deleteTimer', timer);
+		};
 		this.adjustAlarm = function(amount){
 			timer.alarmSeconds += amount;
 			if (timer.alarmSeconds < 0){
@@ -59,16 +66,48 @@
 		this.toggleAlarm = function(){
 			timer.alarmEnabled = !timer.alarmEnabled;
 		}
+		
+		$scope.$on('startAll', function(event){
+			self.startTimer();
+		});
+		$scope.$on('stopAll', function(event){
+			self.stopTimer();
+		});
+		$scope.$on('resetAll', function(event){
+			self.resetTimer();
+		});
 	}]);	
 	
-	app.controller('AppController', function(){
+	app.controller('AppController', ['$scope', function($scope){
 		var self = this;
-		this.timers = [];
-		addTimer();		
+		this.timers = [];			
 		
-		function addTimer(){
+		this.addTimer = function(){
 			self.timers.push(new Timer());
+		}		
+		this.startAll = function(){
+			$scope.$broadcast('startAll');
+		}		
+		this.stopAll = function(){
+			$scope.$broadcast('stopAll');
 		}
-	});
+		this.resetAll = function(){
+			$scope.$broadcast('resetAll');
+		}
+		/*Reset the page title*/
+		function resetTitle(){
+			document.title = "Tiny Timer ng";
+		}
+		
+		$scope.$on('deleteTimer', function(event, elem){
+			var i = self.timers.indexOf(elem);
+			if (i != -1){
+				self.timers.splice(i, 1);
+			}
+		});
+		
+		document.onfocus = resetTitle;
+		this.addTimer();
+	}]);
 	
 })();

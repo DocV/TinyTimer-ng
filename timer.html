@@ -1,16 +1,30 @@
 <!doctype html>
 <html ng-app="timer">
 	<head>
-		<title>Tiny Timer</title>
+		<title>Tiny Timer ng</title>
 		<meta charset="utf-8" />
 		<link rel="shortcut icon" type="image/png" href="favicon.png" />
 		<link rel="stylesheet" type="text/css" href="bootstrap.min.css" />
 		<link rel="stylesheet" type="text/css" href="style.css" />
 	</head>
-	<body>
+	<body ng-controller="AppController as appCtrl">
 		<h1 class="text-center">Tiny Timer ng</h1>
-		<div class="container" ng-controller="AppController as appCtrl">
-			<div ng-repeat="timer in appCtrl.timers" ng-controller="TimerController as timerCtrl">
+		<div class="container" >
+				<div class="col-sm-2">
+					<a href class="btn btn-default btn-block" role="button" ng-click="appCtrl.addTimer()">New Timer</a>
+				</div>
+				<div class="col-sm-2">
+					<a href class="btn btn-default btn-block" role="button" ng-click="appCtrl.startAll()">Start All</a>
+				</div>
+				<div class="col-sm-2">
+					<a href class="btn btn-default btn-block" role="button" ng-click="appCtrl.stopAll()">Stop All</a>
+				</div>
+				<div class="col-sm-2">
+					<a href class="btn btn-default btn-block" role="button" ng-click="appCtrl.resetAll()">Reset All</a>
+				</div>
+			</div>
+		<div class="container">			
+			<div class="timer-container" ng-repeat="timer in appCtrl.timers" ng-controller="TimerController as timerCtrl">
 				<div class="row">
 				
 					<div class="col-sm-2 text-center timer-display">{{timer.formattedSeconds}}</div>
@@ -22,6 +36,12 @@
 					</div>
 					<div class="col-sm-2">
 						<a href class="btn btn-default btn-block" role="button" ng-click="timerCtrl.resetTimer()">Reset</a>
+					</div>
+					<div class="col-sm-2">
+						<input type="text" ng-model="timer.name"></input>
+					</div>
+					<div class="col-sm-2">
+						<a href class="btn btn-default btn-block" role="button" ng-click="timerCtrl.deleteTimer()">Delete</a>
 					</div>
 				</div>
 				<div class="row">
